@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import createHistory from 'history/createHashHistory';
+import createHistory from 'history/createMemoryHistory';
 import PropTypes from 'prop-types';
 import { updateRoute } from '../actions';
 import { countSlides } from './slides';
@@ -29,6 +29,14 @@ export default class Controller extends Component {
 
   componentDidMount() {
     this.unlisten = this.history.listen(this._updateRoute.bind(this));
+    const location = this.history.location;
+    const slideCount = countSlides(this.props.children.props.children);
+    this.props.store.dispatch(
+      updateRoute({
+        location,
+        slideCount
+      })
+    );
   }
 
   shouldComponentUpdate(nextProps, nextState) {
